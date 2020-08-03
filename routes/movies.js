@@ -6,12 +6,12 @@ const mongoose = require("mongoose");
 const express = require("express");
 const router = express.Router();
 
-router.get("/", async (req, res) => {
+router.get("/", [auth, admin], async (req, res) => {
   const movies = await Movie.find().select("-__v").sort("name");
   res.send(movies);
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/:id", [auth, admin], async (req, res) => {
   try {
     const movie = await Movie.findById(req.params.id).select("-__v");
     res.send(movie);
@@ -20,7 +20,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.post("/", auth, async (req, res) => {
+router.post("/", [auth, admin], async (req, res) => {
   const { error } = validate(req.body);
 
   if (error) {
@@ -44,7 +44,7 @@ router.post("/", auth, async (req, res) => {
   res.send(movie);
 });
 
-router.put("/:id", auth, async (req, res) => {
+router.put("/:id", [auth, admin], async (req, res) => {
   const { error } = validate(req.body);
 
   if (error) {
