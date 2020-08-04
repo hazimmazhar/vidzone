@@ -20,7 +20,7 @@ router.get("/:id", [auth, admin], async (req, res) => {
     const rental = await Rental.findById(req.params.id).select("-__v");
     res.send(rental);
   } catch (error) {
-    return res.status(404).send("Movie does not exist");
+    return res.status(404).send("Rental does not exist");
   }
 });
 
@@ -37,7 +37,11 @@ router.post("/", [auth, admin], async (req, res) => {
   const movie = await Movie.findById(req.body.movieId);
   if (!movie) return res.status(400).send("Invalid movie.");
 
-  if (movie.numberInStock === 0) return res.status(400).send("Movie not found");
+  const rentalInDb = await Rental.lookup(req.body.customerId, req.body.movieId);
+
+  if (rentalInDb) return res.status(400).send("Rental already exists");
+
+  if (movie.numberInStock === 0) return res.status(404).send("Movie not found");
 
   let rental = new Rental({
     customer: {

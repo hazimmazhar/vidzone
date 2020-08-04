@@ -3,10 +3,20 @@ const router = express.Router();
 const Joi = require("joi");
 const validate = require("../middleware/validate");
 const auth = require("../middleware/auth");
+const admin = require("../middleware/admin");
 const { Rental } = require("../models/rental");
 const { Movie } = require("../models/movie");
 
-router.post("/", [auth, validate(validateReturn)], async (req, res) => {
+router.get("/:id", [auth, admin], async (req, res) => {
+  try {
+    const rental = await Rental.findById(req.params.id).select("-__v");
+    res.send(rental);
+  } catch (error) {
+    return res.status(404).send("Rental does not exist");
+  }
+});
+
+router.post("/", [auth, admin, validate(validateReturn)], async (req, res) => {
   const rental = await Rental.lookup(req.body.customerId, req.body.movieId);
 
   if (!rental) return res.status(404).send("Rental not found.");
