@@ -26,6 +26,12 @@ const movieSchema = new mongoose.Schema({
     min: 0,
     max: 255,
   },
+  imdbRating: {
+    type: Number,
+    required: true,
+    min: 1,
+    max: 10,
+  },
 });
 
 const Movie = mongoose.model("Movie", movieSchema);
@@ -36,6 +42,7 @@ function validateMovie(movie) {
     genreId: Joi.objectId().required(),
     numberInStock: Joi.number().min(0).max(255).required(),
     dailyRentalRate: Joi.number().min(0).max(255).required(),
+    imdbRating: Joi.number().min(1).max(10).required(),
   };
 
   return Joi.validate(movie, schema);

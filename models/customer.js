@@ -14,7 +14,19 @@ const customerSchema = new mongoose.Schema({
     minlength: 5,
     maxlength: 50,
   },
-  isGold: { type: Boolean, default: false },
+  email: {
+    type: String,
+    required: true,
+    minlength: 5,
+    maxlength: 255,
+    unique: true,
+  },
+  address: {
+    type: String,
+    required: true,
+    minlength: 5,
+    maxlength: 255,
+  },
 });
 
 const Customer = mongoose.model("Customer", customerSchema);
@@ -23,7 +35,8 @@ function validateCustomer(customer) {
   const schema = {
     name: Joi.string().min(5).max(50).required(),
     phone: Joi.string().min(5).max(50).required(),
-    isGold: Joi.boolean(),
+    email: Joi.string().min(5).max(255).required().email(),
+    address: Joi.string().min(5).max(255).required(),
   };
 
   return Joi.validate(customer, schema);

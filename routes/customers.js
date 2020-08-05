@@ -29,7 +29,8 @@ router.post("/", [auth, admin], async (req, res) => {
   const customer = await new Customer({
     name: req.body.name,
     phone: req.body.phone,
-    isGold: req.body.isGold,
+    email: req.body.email,
+    address: req.body.address,
   });
   await customer.save();
 
@@ -48,7 +49,8 @@ router.put("/:id", [auth, admin], async (req, res) => {
       {
         name: req.body.name,
         phone: req.body.phone,
-        isGold: req.body.isGold,
+        email: req.body.email,
+        address: req.body.address,
       },
       { new: true }
     );
