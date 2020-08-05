@@ -1,3 +1,4 @@
 {
-  "jwtPrivateKey": "vidzone_jwtPrivateKey"
+  "jwtPrivateKey": "vidzone_jwtPrivateKey",
+  "db": "vidzone_db"
 }
