@@ -6,12 +6,12 @@ const mongoose = require("mongoose");
 const express = require("express");
 const router = express.Router();
 
-router.get("/", async (req, res) => {
+router.get("/", [auth, admin], async (req, res) => {
   const genres = await Genre.find().sort("name");
   res.send(genres);
 });
 
-router.get("/:id", validateObjectId, async (req, res) => {
+router.get("/:id", [auth, admin], validateObjectId, async (req, res) => {
   try {
     const genre = await Genre.findById(req.params.id);
     res.send(genre);
@@ -20,7 +20,7 @@ router.get("/:id", validateObjectId, async (req, res) => {
   }
 });
 
-router.post("/", auth, async (req, res) => {
+router.post("/", [auth, admin], auth, async (req, res) => {
   const { error } = validate(req.body);
 
   if (error) {
@@ -33,7 +33,7 @@ router.post("/", auth, async (req, res) => {
   res.send(genre);
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", [auth, admin], async (req, res) => {
   const { error } = validate(req.body);
 
   if (error) {
